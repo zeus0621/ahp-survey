@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>澎湖永續觀光指標 — AHP 專家線上問卷</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --fg:#111;
+      --muted:#555;
+      --card:#f6f7f9;
+      --line:#d8dbe0;
+      --accent:#1f6feb;
+    }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color:var(--fg);
+      background:var(--bg);
+    }
+    header{
+      padding:20px 16px;
+      border-bottom:1px solid var(--line);
+      position: sticky;
+      top:0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(6px);
+    }
+    h1{font-size:18px; margin:0 0 6px;}
+    header p{margin:0; color:var(--muted); font-size:13px; line-height:1.4;}
+    main{max-width:980px; margin:0 auto; padding:16px;}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+      margin:12px 0;
+    }
+    h2{font-size:16px; margin:0 0 10px;}
+    h3{font-size:14px; margin:18px 0 8px;}
+    label{display:block; font-size:13px; margin:10px 0 6px;}
+    input[type="text"], input[type="number"]{
+      width:100%;
+      padding:10px 10px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      font-size:14px;
+      background:#fff;
+      box-sizing:border-box;
+    }
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 720px){
+      .grid2{grid-template-columns: 1fr;}
+    }
+    .pair{
+      display:grid;
+      grid-template-columns: 1fr 1.6fr 1fr;
+      gap:10px;
+      align-items:center;
+      padding:10px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      margin:10px 0;
+    }
+    .pair .side{
+      font-size:13px;
+      line-height:1.35;
+    }
+    .pair .side strong{display:block; font-size:12px; color:var(--muted); margin-bottom:4px;}
+    .pair .scale{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .scale .legend{
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      color:var(--muted);
+    }
+    /* Ensure range sliders are visible across browsers */
+    input[type="range"]{
+      width:100%;
+      height: 22px;
+      background: transparent;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input[type="range"]::-webkit-slider-runnable-track{
+      height: 6px;
+      background: #d0d7de;
+      border-radius: 999px;
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -8px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+    input[type="range"]::-moz-range-track{
+      height: 6px;
+      background: #d0d7de;
+      border-radius: 999px;
+    }
+    input[type="range"]::-moz-range-thumb{
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+    .value{
+
+      font-variant-numeric: tabular-nums;
+      font-size:12px;
+      color:var(--muted);
+      text-align:center;
+    }
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+      margin:6px 0 0;
+    }
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    button{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px 12px;
+      font-size:14px;
+      background:#fff;
+      cursor:pointer;
+    }
+    button.primary{
+      background:var(--accent);
+      color:#fff;
+      border-color:var(--accent);
+    }
+    .ok{color:#0a7a2f;}
+    .warn{color:#a14700;}
+    pre{
+      background:#0b1020;
+      color:#d6e2ff;
+      padding:12px;
+      border-radius:12px;
+      overflow:auto;
+      font-size:12px;
+      line-height:1.45;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>澎湖永續觀光指標 — AHP 專家線上問卷（滑桿版）</h1>
+    <p>用滑桿表示兩兩比較：往左代表「左側較重要」、往右代表「右側較重要」、置中代表「同等重要」。</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>一、基本資料（選填）</h2>
+      <div class="grid2">
+        <div>
+          <label>姓名（可匿名）</label>
+          <input id="name" type="text" autocomplete="name" />
+        </div>
+        <div>
+          <label>單位／職稱</label>
+          <input id="org" type="text" />
+        </div>
+        <div>
+          <label>專長領域</label>
+          <input id="field" type="text" />
+        </div>
+        <div>
+          <label>相關年資（年）</label>
+          <input id="years" type="number" min="0" step="1" />
+        </div>
+      </div>
+      <p class="hint">本檔為「可離線開啟的網頁問卷」。若你需要「可送出到雲端」(例如 Google Forms/Qualtrics/自架後端) 版，我也可以幫你改成對應格式。</p>
+    </section>
+
+    <section class="card">
+      <h2>二、滑桿尺度（對應 Saaty 1–9）</h2>
+
+      <p class="hint">
+        滑桿數值 v 介於 -9 到 +9：<br/>
+        v=0 表示同等重要；v=-k 表示「左側較重要」且程度為 k；v=+k 表示「右側較重要」且程度為 k。<br/>
+        系統會自動將 v 轉換成 AHP 比率 a_ij：若 v&gt;0，a_ij=v；若 v&lt;0，a_ij=1/|v|；若 v=0，a_ij=1。      </p>
+    </section>
+>
+
+    <section class="card" id="sec-dimensions">
+      <h2>三、構面層級兩兩比較（A vs B vs C vs D）</h2>
+      <div id="pairs-dimensions"></div>
+    </section
+    <section class="card" id="sec-wizard">
+      <h2>四、指標兩兩比較（分頁/分批填答）</h2>
+      <p class="hint">為降低填答負擔，本問卷把各構面拆成分頁：一次只填一個構面的指標兩兩比較。填完後按「下一頁」。</p>
+
+      <div class="toolbar">
+        <button id="btn-prev">上一頁</button>
+        <button id="btn-next" class="primary">下一頁</button>
+      </div>
+      <p id="page-indicator" class="hint"></p>
+
+      <div id="page-A">
+        <h3>A 永續管理（A1–A14）</h3>
+        <div id="pairs-A"></div>
+      </div>
+
+      <div id="page-B">
+        <h3>B 社會經濟永續（B1–B11）</h3>
+        <div id="pairs-B"></div>
+      </div>
+
+      <div id="page-C">
+        <h3>C 文化永續（C1–C10）</h3>
+        <div id="pairs-C"></div>
+      </div>
+
+      <div id="page-D">
+        <h3>D 環境永續（D1–D16）</h3>
+        <div id="pairs-D"></div>
+      </div>
+    </section>
+
+
+
+    <section class="card">
+      <h2>八、匯出結果</h2>
+      <p id="status" class="hint">尚未匯出。</p>
+      <div class="toolbar">
+        <button id="btn-submit" class="primary">送出到 Google Sheet</button>
+        <button id="btn-copy" class="primary">複製 JSON</button>
+
+        <button id="btn-download">下載 JSON 檔</button>
+        <button id="btn-reset">全部重設為同等重要</button>
+      </div>
+      <h3>預覽（JSON）</h3>
+      <pre id="preview">{}</pre>
+    </section>
+  </main>
+  <script>
+    // === Google Apps Script Web App URL ===
+    // Paste your deployed Web App URL here:
+    // e.g. https://script.google.com/macros/s/XXXX/exec
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycQVX1rDtahD2oPx4jmfrG4V0PgpmVJlNHE-lYBjtaA2qKTA6W9B-0mRPs0Qs2vZeE/exec";
+
+
+    // ---- Data model ----
+-
+    // Slider value v in [-9..+9], but excluding 0? we allow 0.
+    // We'll default to 0 (equal importance).
+    const scaleMarks = [-9,-7,-5,-3,-1,0,1,3,5,7,9];
+
+    const items = {
+      dimensions: [
+
+        {id:"A", label:"永續管理（A）"},
+        {id:"B", label:"社會經濟永續（B）"},
+        {id:"C", label:"文化永續（C）"},
+        {id:"D", label:"環境永續（D）"},
+      ],      A: [
+        {id:"A1", label:"目的地管理責任分工與協調機制"},
+        {id:"A2", label:"永續觀光策略與行動計畫"},
+        {id:"A3", label:"永續績效監測與公開報告"},
+        {id:"A4", label:"促進企業/業者採行永續標準"},
+        {id:"A5", label:"回應居民對觀光的意見與回饋"},
+        {id:"A6", label:"回應遊客對旅遊體驗/管理的意見與回饋"},
+        {id:"A7", label:"提供正確透明的旅遊資訊與宣導"},
+        {id:"A8", label:"遊客量與活動管理（尖峰/熱點分流）"},
+        {id:"A9", label:"土地使用/開發管制兼顧保護"},
+        {id:"A10", label:"氣候變遷風險調適措施"},
+        {id:"A11", label:"風險與危機管理機制"},
+        {id:"A12", label:"跨島交通/旺季人流整體協調與資訊揭露（在地化）"},
+        {id:"A13", label:"在地社區/漁業等利害關係人參與協作（在地化）"},
+        {id:"A14", label:"熱門海域活動許可/導覽/稽核管理（在地化）"},
+      ],
+      B: [
+        {id:"B1", label:"衡量觀光對在地經濟貢獻"},
+        {id:"B2", label:"合理且具發展性的就業/職涯機會"},
+        {id:"B3", label:"支持在地創業、在地採購與公平交易"},
+        {id:"B4", label:"觀光發展回饋社區/公共需求"},
+        {id:"B5", label:"避免剝削、歧視或不當對待"},
+        {id:"B6", label:"保障居民/社區財產與資源使用權"},
+        {id:"B7", label:"旅遊安全與治安"},
+        {id:"B8", label:"無障礙與全民可及性"},
+        {id:"B9", label:"在地採購比例與來源可辨識（在地化）"},
+        {id:"B10", label:"降低旺季生活成本衝擊（在地化）"},
+        {id:"B11", label:"提升就業穩定/淡旺季分流（在地化）"},
+      ],
+      C: [
+        {id:"C1", label:"保護有形文化資產（建築/聚落/古蹟）"},
+        {id:"C2", label:"保存與展示文化文物/器物"},
+        {id:"C3", label:"傳承無形文化資產（祭典/技藝/生活文化）"},
+        {id:"C4", label:"尊重傳統使用/進入權（文化與生活空間）"},
+        {id:"C5", label:"尊重在地文化智慧財產權"},
+        {id:"C6", label:"文化場域遊客行為與承載管理"},
+        {id:"C7", label:"文化解說與詮釋清楚正確具教育性"},
+        {id:"C8", label:"文化景觀與生活文化保護活化（石滬/玄武岩聚落等，在地化）"},
+        {id:"C9", label:"宗教/祭典文化管理與傳承（在地化）"},
+        {id:"C10", label:"具在地觀點的文化解說（在地化）"},
+      ],
+      D: [
+        {id:"D1", label:"保護敏感自然環境（海岸/潮間帶/保護區）"},
+        {id:"D2", label:"自然場域遊客行為與承載管理"},
+        {id:"D3", label:"規範遊客與野生動物互動"},
+        {id:"D4", label:"避免物種不當利用與動物福祉"},
+        {id:"D5", label:"節能與能源效率"},
+        {id:"D6", label:"節水與水資源管理"},
+        {id:"D7", label:"維持良好水質（海域與水體）"},
+        {id:"D8", label:"廢/污水處理降低衝擊"},
+        {id:"D9", label:"固體廢棄物減量/回收/處理"},
+        {id:"D10", label:"溫室氣體減量與氣候緩解"},
+        {id:"D11", label:"低衝擊運輸（大眾運輸/步行/自行車）"},
+        {id:"D12", label:"降低光害與噪音干擾"},
+        {id:"D13", label:"海漂垃圾管理與海灘清潔回收（在地化）"},
+        {id:"D14", label:"淡水供應韌性與旺季用水尖峰管理（在地化）"},
+        {id:"D15", label:"潮間帶與珊瑚/海草床踏踩管制與巡查（在地化）"},
+        {id:"D16", label:"租賃運具與交通碳排管理（電動化/充電/低碳路網，在地化）"},
+      ]
+
+    };
+
+    // ---- Paging ----
+    const pages = ["A","B","C","D"];
+    let currentPageIndex = 0;
+
+    function showPage(){
+      pages.forEach((p, idx) => {
+        const el = document.getElementById(`page-${p}`);
+        if(el) el.style.display = (idx === currentPageIndex) ? "block" : "none";
+      });
+      const indicator = document.getElementById("page-indicator");
+      if(indicator){
+        indicator.textContent = `目前頁面：${currentPageIndex+1}/${pages.length}（${pages[currentPageIndex]} 構面）`;
+      }
+      const btnPrev = document.getElementById("btn-prev");
+      const btnNext = document.getElementById("btn-next");
+      if(btnPrev) btnPrev.disabled = currentPageIndex === 0;
+      if(btnNext) btnNext.disabled = currentPageIndex === pages.length-1;
+    }
+
+    function makePairs(list){
+
+      const pairs = [];
+      for(let i=0;i<list.length;i++){
+        for(let j=i+1;j<list.length;j++){
+          pairs.push({left:list[i], right:list[j]});
+        }
+      }
+      return pairs;
+    }
+
+    const pairs = {
+      dimensions: makePairs(items.dimensions),
+      A: makePairs(items.A),
+      B: makePairs(items.B),
+      C: makePairs(items.C),
+      D: makePairs(items.D),
+    };
+
+    // answers[key] = slider value v in [-9..+9]
+    // key format: "LEFT__RIGHT" (order fixed)
+    const answers = {};
+    function keyOf(leftId, rightId){ return `${leftId}__${rightId}`; }
+
+    function ratioFromV(v){
+      if(v === 0) return 1;
+      if(v > 0) return v;
+      return 1 / Math.abs(v);
+    }
+
+    function prettyRatio(v){
+      const r = ratioFromV(v);
+      if(Number.isInteger(r)) return `${r}`;
+      // round to 4 dp
+      return `${Math.round(r*10000)/10000}`;
+    }
+
+    function renderPair(container, left, right){
+      const key = keyOf(left.id, right.id);
+      if(!(key in answers)) answers[key] = 0;
+
+      const wrap = document.createElement("div");
+      wrap.className = "pair";
+
+      const leftDiv = document.createElement("div");
+      leftDiv.className = "side";
+      leftDiv.innerHTML = `<strong>左側</strong>${left.label}`;
+
+      const rightDiv = document.createElement("div");
+      rightDiv.className = "side";
+      rightDiv.innerHTML = `<strong>右側</strong>${right.label}`;
+
+      const scaleDiv = document.createElement("div");
+      scaleDiv.className = "scale";
+
+      const legend = document.createElement("div");
+      legend.className = "legend";
+      legend.innerHTML = `<span>左側較重要</span><span>同等</span><span>右側較重要</span>`;
+
+      const range = document.createElement("input");
+      range.type = "range";
+      range.min = "-9";
+      range.max = "9";
+      range.step = "1";
+      range.value = answers[key];
+
+      // snap to Saaty-like odd numbers + 0: if user picks even, we'll keep but display nearest mark.
+      const value = document.createElement("div");
+      value.className = "value";
+      value.textContent = formatValue(key);
+
+      range.addEventListener("input", () => {
+        // optional snapping: snap to nearest in scaleMarks
+        const v = parseInt(range.value, 10);
+        let snapped = scaleMarks.reduce((best, m) => Math.abs(m - v) < Math.abs(best - v) ? m : best, scaleMarks[0]);
+        answers[key] = snapped;
+        range.value = snapped;
+        value.textContent = formatValue(key);
+        updatePreview();
+      });
+
+      scaleDiv.appendChild(legend);
+      scaleDiv.appendChild(range);
+      scaleDiv.appendChild(value);
+
+      wrap.appendChild(leftDiv);
+      wrap.appendChild(scaleDiv);
+      wrap.appendChild(rightDiv);
+      container.appendChild(wrap);
+    }
+
+    function formatValue(key){
+      const v = answers[key];
+      if(v === 0) return `同等重要（AHP 比率 a_ij = 1）`;
+      if(v < 0) return `左側較重要｜程度 ${Math.abs(v)}｜AHP 比率 a_ij = ${prettyRatio(v)}`;
+      return `右側較重要｜程度 ${v}｜AHP 比率 a_ij = ${prettyRatio(v)}`;
+    }
+
+    function renderAll(){
+      const map = [
+        ["pairs-dimensions", pairs.dimensions],
+        ["pairs-A", pairs.A],
+        ["pairs-B", pairs.B],
+        ["pairs-C", pairs.C],
+        ["pairs-D", pairs.D],
+      ];
+      for(const [id, list] of map){
+        const container = document.getElementById(id);
+        container.innerHTML = "";
+        list.forEach(p => renderPair(container, p.left, p.right));
+      }
+    }
+
+    function collect(){
+      const meta = {
+        name: document.getElementById("name").value || null,
+        org: document.getElementById("org").value || null,
+        field: document.getElementById("field").value || null,
+        years: document.getElementById("years").value ? Number(document.getElementById("years").value) : null,
+        exportedAt: new Date().toISOString()
+      };
+
+      const out = { meta, comparisons: { dimensions: [], A: [], B: [], C: [], D: [] } };
+
+      function push(section, list){
+        list.forEach(p => {
+          const key = keyOf(p.left.id, p.right.id);
+          const v = answers[key] ?? 0;
+          out.comparisons[section].push({
+            left: p.left.id,
+            right: p.right.id,
+            slider: v,
+            ahp_ratio_aij: ratioFromV(v)
+          });
+        });
+      }
+
+      push("dimensions", pairs.dimensions);
+      push("A", pairs.A);
+      push("B", pairs.B);
+      push("C", pairs.C);
+      push("D", pairs.D);
+
+      return out;
+    }
+
+    function updatePreview(){
+      const data = collect();
+      document.getElementById("preview").textContent = JSON.stringify(data, null, 2);
+    }
+
+    function setStatus(msg, cls){
+      const el = document.getElementById("status");
+      el.textContent = msg;
+      el.className = `hint ${cls||""}`;
+    }
+
+    // ---- Buttons ----
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAll      updatePreview();
+
+      // paging init
+      const btnPrev = document.getElementById("btn-prev");
+      const btnNext = document.getElementById("btn-next");
+      if(btnPrev) btnPrev.addEventListener("click", () => { if(currentPageIndex>0){ currentPageIndex--; showPage(); } });
+      if(btnNext) btnNext.addEventListener("click", () => { if(currentPageIndex<pages.length-1){ currentPageIndex++; showPage(); } });
+      showPage();
+
+);
+
+      document.getElementById("btn-reset").addEventListener("click", () => {
+        Object.keys(answers).forEach(k => answers[k] = 0);
+        renderAll();
+        updatePreview();
+        setStatus("已全部重設為同等重要。", "ok");
+      });
+
+      document.getElementById("btn-copy").addEventListener("click", async () => {
+        try{
+          const txt = document.getElementById("preview").textContent;
+          await navigator.clipboard.writeText(txt);
+          setStatus("已複製 JSON 到剪貼簿。", "ok");
+        }catch(e){
+          setStatus("複製失敗：此瀏覽器可能禁止剪貼簿存取，請改用「下載 JSON 檔」。", "warn");
+        }
+      });
+
+      document.getElementById("btn-download").addEventListener("click", () => {
+        const data = collect();
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ahp_responses.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remov        URL.revokeObjectURL(url);
+        setStatus("已下載 JSON 檔。", "ok");
+      });
+
+});
+
+      document.getElementById("btn-submit").addEventListener("click", async () => {
+        if(!SCRIPT_URL){
+          setStatus("尚未設定 SCRIPT_URL：請先在 ahp_online.html 內貼上 Apps Script Web App URL。", "warn");
+          return;
+        }
+        setStatus("送出中…", "");
+        try{
+          const data = collect();
+          const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          });
+          const text = await res.text();
+          let obj = null;
+          try{ obj = JSON.parse(text); }catch(_e){}
+          if(res.ok && obj && obj.ok){
+            setStatus("送出成功：已寫入 Google Sheet。", "ok");
+          }else{
+            setStatus("送出失敗：請確認 Apps Script 佈署權限為「任何人」且網址正確。", "warn");
+          }
+        }catch(e){
+          setStatus("送出失敗：可能是網路/CORS/權限問題。請確認 Apps Script 佈署設定。", "warn");
+        }
+      });
+
+
+
+      // update preview when meta changes
+      ["name","org","field","years"].forEach(id => {
+        document.getElementById(id).addEventListener("input", updatePreview);
+      });
+    });
+  </script>
+</body>
+</html>
