@@ -32,7 +32,7 @@
     }
     h1{font-size:24px; margin:0 0 8px; font-weight:700;}
     header p{margin:0; color:var(--muted); font-size:16px;}
-    main{max-width:800px; margin:0 auto; padding:20px;}
+    main{max-width:800px; margin:0 auto; padding:20px; padding-bottom:160px;}
     
     /* Progress bar */
     .progress-container{
@@ -42,15 +42,15 @@
       right:0;
       background:var(--card);
       border-top:1px solid var(--line);
-      padding:12px 20px;
+      padding:12px 20px 16px;
       z-index:100;
     }
     .progress-bar{
-      height:8px;
+      height:10px;
       background:#e5e7eb;
       border-radius:99px;
       overflow:hidden;
-      margin-bottom:8px;
+      margin-bottom:10px;
     }
     .progress-fill{
       height:100%;
@@ -58,10 +58,50 @@
       border-radius:99px;
       transition:width 0.3s ease;
     }
-    .progress-text{
-      text-align:center;
+    .progress-info{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
       font-size:15px;
       color:var(--muted);
+    }
+    .progress-section{
+      font-weight:600;
+      color:var(--fg);
+    }
+    
+    /* Nav buttons */
+    .nav-buttons{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      margin-top:12px;
+    }
+    .nav-btn{
+      padding:12px 32px;
+      font-size:17px;
+      font-weight:600;
+      border-radius:12px;
+      cursor:pointer;
+      border:2px solid var(--line);
+      background:#fff;
+      transition:all 0.2s;
+    }
+    .nav-btn:hover:not(:disabled){
+      border-color:var(--accent);
+      color:var(--accent);
+    }
+    .nav-btn:disabled{
+      opacity:0.4;
+      cursor:not-allowed;
+    }
+    .nav-btn.primary{
+      background:var(--accent);
+      color:#fff;
+      border-color:var(--accent);
+    }
+    .nav-btn.primary:hover:not(:disabled){
+      background:#1d4ed8;
     }
     
     /* Sections */
@@ -71,7 +111,9 @@
       padding:24px;
       margin:20px 0;
       box-shadow:0 1px 3px rgba(0,0,0,0.08);
+      display:none;
     }
+    .section.active{display:block;}
     .section-header{
       font-size:20px;
       font-weight:700;
@@ -79,6 +121,12 @@
       margin:0 0 20px;
       padding-bottom:12px;
       border-bottom:2px solid var(--accent-light);
+    }
+    .section-desc{
+      font-size:16px;
+      color:var(--muted);
+      margin-bottom:20px;
+      line-height:1.5;
     }
     
     /* Form fields */
@@ -189,7 +237,7 @@
     /* Submit */
     .submit-section{
       text-align:center;
-      padding:40px 20px 120px;
+      padding:20px;
     }
     .btn-submit{
       background:var(--accent);
@@ -203,12 +251,13 @@
       box-shadow:0 4px 12px rgba(37,99,235,0.3);
       transition:transform 0.2s, box-shadow 0.2s;
     }
-    .btn-submit:hover{
+    .btn-submit:hover:not(:disabled){
       transform:translateY(-2px);
       box-shadow:0 6px 16px rgba(37,99,235,0.4);
     }
-    .btn-submit:active{
-      transform:translateY(0);
+    .btn-submit:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
     }
     .status{
       margin-top:16px;
@@ -217,29 +266,29 @@
     .status.ok{color:var(--success);}
     .status.warn{color:#dc2626;}
     
-    /* Subsection titles */
-    .subsection-title{
-      font-size:18px;
-      font-weight:600;
-      color:var(--fg);
-      margin:32px 0 16px;
-      padding:12px 16px;
+    /* Section counter */
+    .section-counter{
+      display:inline-block;
       background:var(--accent-light);
-      border-radius:12px;
+      color:var(--accent);
+      padding:4px 12px;
+      border-radius:20px;
+      font-size:14px;
+      font-weight:600;
+      margin-bottom:12px;
     }
-    .subsection-title:first-of-type{margin-top:0;}
   </style>
 </head>
 <body>
   <header>
     <h1>澎湖永續觀光指標 — AHP 專家問卷</h1>
-    <p>請依您的專業判斷，評估各項目的相對重要性</p>
+    <p>請依您的專業判斷，評估各項目的相對優先性</p>
   </header>
 
   <main>
     <!-- 基本資料 -->
-    <section class="section">
-      <h2 class="section-header">一、基本資料（選填）</h2>
+    <section class="section active" data-section="0">
+      <h2 class="section-header">基本資料（選填）</h2>
       <div class="grid2">
         <div>
           <label>姓名（可匿名）</label>
@@ -261,40 +310,54 @@
     </section>
 
     <!-- 構面比較 -->
-    <section class="section">
-      <h2 class="section-header">二、四大構面重要性比較</h2>
+    <section class="section" data-section="1">
+      <span class="section-counter">第 1 部分，共 5 部分</span>
+      <h2 class="section-header">四大構面優先性比較</h2>
+      <p class="section-desc">請比較四大構面的優先程度：永續管理、社會經濟永續、文化永續、環境永續</p>
       <div id="pairs-dimensions"></div>
     </section>
 
     <!-- A 永續管理 -->
-    <section class="section">
-      <h2 class="section-header">三、永續管理（A）指標比較</h2>
+    <section class="section" data-section="2">
+      <span class="section-counter">第 2 部分，共 5 部分</span>
+      <h2 class="section-header">永續管理（A）指標比較</h2>
+      <p class="section-desc">共 14 項指標，請兩兩比較其優先程度</p>
       <div id="pairs-A"></div>
     </section>
 
     <!-- B 社會經濟永續 -->
-    <section class="section">
-      <h2 class="section-header">四、社會經濟永續（B）指標比較</h2>
+    <section class="section" data-section="3">
+      <span class="section-counter">第 3 部分，共 5 部分</span>
+      <h2 class="section-header">社會經濟永續（B）指標比較</h2>
+      <p class="section-desc">共 11 項指標，請兩兩比較其優先程度</p>
       <div id="pairs-B"></div>
     </section>
 
     <!-- C 文化永續 -->
-    <section class="section">
-      <h2 class="section-header">五、文化永續（C）指標比較</h2>
+    <section class="section" data-section="4">
+      <span class="section-counter">第 4 部分，共 5 部分</span>
+      <h2 class="section-header">文化永續（C）指標比較</h2>
+      <p class="section-desc">共 10 項指標，請兩兩比較其優先程度</p>
       <div id="pairs-C"></div>
     </section>
 
     <!-- D 環境永續 -->
-    <section class="section">
-      <h2 class="section-header">六、環境永續（D）指標比較</h2>
+    <section class="section" data-section="5">
+      <span class="section-counter">第 5 部分，共 5 部分</span>
+      <h2 class="section-header">環境永續（D）指標比較</h2>
+      <p class="section-desc">共 16 項指標，請兩兩比較其優先程度</p>
       <div id="pairs-D"></div>
     </section>
 
     <!-- 送出 -->
-    <div class="submit-section">
-      <button id="btn-submit" class="btn-submit">結束送出</button>
-      <p id="status" class="status"></p>
-    </div>
+    <section class="section" data-section="6">
+      <h2 class="section-header">問卷完成</h2>
+      <p class="section-desc">感謝您完成所有題目！請按下方按鈕送出您的回答。</p>
+      <div class="submit-section">
+        <button id="btn-submit" class="btn-submit">結束送出</button>
+        <p id="status" class="status"></p>
+      </div>
+    </section>
   </main>
 
   <!-- 進度條 -->
@@ -302,13 +365,30 @@
     <div class="progress-bar">
       <div id="progress-fill" class="progress-fill" style="width:0%"></div>
     </div>
-    <div id="progress-text" class="progress-text">填答進度：0%</div>
+    <div class="progress-info">
+      <span id="progress-text">已完成 0 題</span>
+      <span id="progress-section" class="progress-section"></span>
+    </div>
+    <div class="nav-buttons">
+      <button id="btn-prev" class="nav-btn" disabled>上一部分</button>
+      <button id="btn-next" class="nav-btn primary">下一部分</button>
+    </div>
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycQVX1rDtahD2oPx4jmfrG4V0PgpmVJlNHE-lYBjtaA2qKTA6W9B-0mRPs0Qs2vZeE/exec";
 
     const scaleMarks = [-9,-7,-5,-3,-1,0,1,3,5,7,9];
+    
+    const sectionNames = [
+      "基本資料",
+      "構面比較",
+      "永續管理 (A)",
+      "社會經濟永續 (B)",
+      "文化永續 (C)",
+      "環境永續 (D)",
+      "送出問卷"
+    ];
 
     const items = {
       dimensions: [
@@ -399,6 +479,8 @@
     const answers = {};
     let totalPairs = 0;
     let answeredPairs = new Set();
+    let currentSection = 0;
+    const totalSections = 7;
 
     function keyOf(leftId, rightId){ return `${leftId}__${rightId}`; }
 
@@ -409,16 +491,39 @@
     }
 
     function formatValue(v){
-      if(v === 0) return "同等重要";
+      if(v === 0) return "同等優先";
       const absV = Math.abs(v);
       const desc = absV <= 1 ? "稍微" : absV <= 3 ? "略為" : absV <= 5 ? "明顯" : absV <= 7 ? "很" : "極為";
-      return v < 0 ? `← ${desc}重要` : `${desc}重要 →`;
+      return v < 0 ? `← ${desc}優先` : `${desc}優先 →`;
     }
 
     function updateProgress(){
-      const pct = Math.round((answeredPairs.size / totalPairs) * 100);
+      const pct = totalPairs > 0 ? Math.round((answeredPairs.size / totalPairs) * 100) : 0;
       document.getElementById("progress-fill").style.width = pct + "%";
-      document.getElementById("progress-text").textContent = `填答進度：${pct}%（${answeredPairs.size}/${totalPairs}）`;
+      document.getElementById("progress-text").textContent = `已完成 ${answeredPairs.size} / ${totalPairs} 題`;
+      document.getElementById("progress-section").textContent = sectionNames[currentSection];
+    }
+
+    function showSection(idx){
+      currentSection = idx;
+      document.querySelectorAll(".section").forEach((el, i) => {
+        el.classList.toggle("active", i === idx);
+      });
+      
+      const btnPrev = document.getElementById("btn-prev");
+      const btnNext = document.getElementById("btn-next");
+      
+      btnPrev.disabled = idx === 0;
+      
+      if(idx === totalSections - 1){
+        btnNext.style.display = "none";
+      } else {
+        btnNext.style.display = "";
+        btnNext.textContent = idx === totalSections - 2 ? "前往送出" : "下一部分";
+      }
+      
+      updateProgress();
+      window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function renderPair(container, left, right){
@@ -430,7 +535,7 @@
 
       const question = document.createElement("div");
       question.className = "pair-question";
-      question.textContent = `比較「${left.label}」與「${right.label}」`;
+      question.textContent = `「${left.label}」vs「${right.label}」`;
 
       const options = document.createElement("div");
       options.className = "pair-options";
@@ -533,6 +638,15 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       renderAll();
+      showSection(0);
+
+      document.getElementById("btn-prev").addEventListener("click", () => {
+        if(currentSection > 0) showSection(currentSection - 1);
+      });
+      
+      document.getElementById("btn-next").addEventListener("click", () => {
+        if(currentSection < totalSections - 1) showSection(currentSection + 1);
+      });
 
       document.getElementById("btn-submit").addEventListener("click", async () => {
         if(!SCRIPT_URL){
@@ -568,10 +682,6 @@
           btn.disabled = false;
           btn.textContent = "結束送出";
         }
-      });
-
-      ["name","org","field","years"].forEach(id => {
-        document.getElementById(id).addEventListener("input", () => {});
       });
     });
   </script>
